@@ -15,18 +15,17 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            # Переходим по абсолютному пути, который мы увидели в логах
-            cd /root/my-devops-test
+            # Создаем папку в домашней директории пользователя (это безопаснее всего)
+            mkdir -p ~/app-deploy
+            cd ~/app-deploy
             
-            # Принудительно чиним Git, если он "сломался"
+            # Чистая синхронизация с GitHub
             git init
             git remote add origin git@github.com:dresky2024/my-devops-test.git || git remote set-url origin git@github.com:dresky2024/my-devops-test.git
-            
-            # Забираем код и сбрасываем состояние до идеального
-            git fetch origin
+            git fetch origin main
             git reset --hard origin/main
             
-            # Запускаем сборку
+            # Запуск через Docker Compose
             sudo docker-compose up -d --build
 
 
