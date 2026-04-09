@@ -8,21 +8,18 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy via SSH
+      - name: SSH and Deploy
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
+            mkdir -p ~/app-deploy
             cd ~/app-deploy
             git init
             git remote add origin git@github.com:dresky2024/my-devops-test.git || git remote set-url origin git@github.com:dresky2024/my-devops-test.git
             git fetch origin main
             git reset --hard origin/main
-            
-            # --- НОВАЯ СТРОКА ТУТ ---
             sudo docker-compose down || true
-            # ------------------------
-            
             sudo docker-compose up -d --build
