@@ -1,0 +1,22 @@
+name: Deploy to Oracle Cloud
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd ~/my-app
+            git pull origin main
+            sudo docker build -t my-custom-app .
+            sudo docker rm -f my-real-app || true
+            sudo docker run -d --name my-real-app -p 80:80 my-custom-app
