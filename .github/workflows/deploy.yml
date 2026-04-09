@@ -15,7 +15,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd $HOME/my-devops-test
+            cd ~/my-devops-test
             git pull origin main
             # Compose сам остановит старое, соберет новое и запустит
             sudo docker-compose up -d --build
