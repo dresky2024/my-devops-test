@@ -15,8 +15,14 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd ~/my-devops-test
-            git pull origin main
-            # Compose сам остановит старое, соберет новое и запустит
+            echo "Я зашел под пользователем: $(whoami)"
+            echo "Мое текущее местоположение: $(pwd)"
+            echo "Список папок здесь:"
+            ls -d */
+            # Если папка найдется, идем в неё, если нет — создаем
+            [ -d "~/my-devops-test" ] && cd ~/my-devops-test || (mkdir -p ~/my-devops-test && cd ~/my-devops-test)
+            git config --global --add safe.directory $(pwd)
+            git pull origin main || git clone git@github.com:dresky2024/my-devops-test.git .
             sudo docker-compose up -d --build
+
 
