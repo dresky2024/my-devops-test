@@ -19,4 +19,4 @@ jobs:
             git pull origin main
             sudo docker build -t my-custom-app .
             sudo docker rm -f my-real-app || true
-            sudo docker run -d --name my-real-app -p 80:80 my-custom-app
+            sudo docker run -d --name my-real-app --restart always -p 80:80 my-custom-app
